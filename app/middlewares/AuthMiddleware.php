@@ -6,8 +6,7 @@ use Slim\Psr7\Response;
 
 class AuthMiddleware
 {
-    public function __invoke(Request $request, RequestHandler $handler): Response
-    {   
+    public function __invoke(Request $request, RequestHandler $handler): Response{   
         $header = $request->getHeaderLine('Authorization');
         $token = trim(explode("Bearer", $header)[1]);
         try {
@@ -21,8 +20,7 @@ class AuthMiddleware
         return $response->withHeader('Content-Type', 'application/json');
     }
 
-    public static function verificarToken(Request $request, RequestHandler $handler): Response
-    {
+    public static function verificarToken(Request $request, RequestHandler $handler): Response{
         $header = $request->getHeaderLine('Authorization');
         $token = trim(explode("Bearer", $header)[1]);
 

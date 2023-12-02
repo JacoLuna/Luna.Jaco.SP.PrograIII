@@ -23,6 +23,7 @@ class MovimientoController extends Movimiento implements IApiUsable {
             $usr->monto = $monto;
             $usr->fecha = $fecha;
             $usr->tipoMovimiento = substr($url,13);
+
             $payload = json_encode(array("mensaje" => "Movimiento hecho"));
 
             switch ($usr->tipoMovimiento) {
@@ -42,9 +43,10 @@ class MovimientoController extends Movimiento implements IApiUsable {
                 $usr->crearMovimiento();
                 Cuenta::registrarMovimiento($nroCuenta, $tipoCuenta, $cuenta->saldo);
                 $usr->guardarFoto($usr);
+                $idMovimiento = Movimiento::obtenerUltimoId();
+                $response = $response->withHeader('idOperacion', $idMovimiento->ultimoId);
             }
         }
-
         $response->getBody()->write($payload);
         return $response
             ->withHeader('Content-Type', 'application/json');
@@ -71,6 +73,7 @@ class MovimientoController extends Movimiento implements IApiUsable {
         $payload = json_encode(array("listaMovimiento" => $lista), JSON_PRETTY_PRINT);
 
         $response->getBody()->write($payload);
+
 
         return $response
             ->withHeader('Content-Type', 'application/json');
@@ -102,6 +105,7 @@ class MovimientoController extends Movimiento implements IApiUsable {
                                                   " monto: " . $body[3]), JSON_PRETTY_PRINT);
         $response->getBody()->write($payload);
 
+
         return $response
             ->withHeader('Content-Type', 'application/json');
     }
@@ -115,6 +119,7 @@ class MovimientoController extends Movimiento implements IApiUsable {
         $movimientos = Movimiento::obtenerTodosDeUnaCuenta($nroCuenta, $tipoMovimiento);
         $payload = json_encode(array("movimientos" => $movimientos));
         $response->getBody()->write($payload);
+
 
         return $response
             ->withHeader('Content-Type', 'application/json');
@@ -130,6 +135,7 @@ class MovimientoController extends Movimiento implements IApiUsable {
         $payload = json_encode(array("movimientos" => $movimientos));
         $response->getBody()->write($payload);
 
+
         return $response
             ->withHeader('Content-Type', 'application/json');
     }
@@ -140,6 +146,7 @@ class MovimientoController extends Movimiento implements IApiUsable {
         $movimientos = Movimiento::obtenerTodosMovsDeUnaCuenta($nroCuenta);
         $payload = json_encode(array("movimientos" => $movimientos));
         $response->getBody()->write($payload);
+
 
         return $response
             ->withHeader('Content-Type', 'application/json');
@@ -152,6 +159,7 @@ class MovimientoController extends Movimiento implements IApiUsable {
         $movimientos = Movimiento::obtenerTodosMovsEntreFechas($tipoMovimiento, $fecha1, $fecha2);
         $payload = json_encode(array("movimientos" => $movimientos));
         $response->getBody()->write($payload);
+
 
         return $response
             ->withHeader('Content-Type', 'application/json');

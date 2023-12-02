@@ -10,7 +10,6 @@ class CuentaController extends Cuenta implements IApiUsable {
 
         $nombre = $parametros['nombre'];
         $apellido = $parametros['apellido'];
-        $clave = $parametros['clave'];
         $tipoDocumento = $parametros['tipoDocumento'];
         $nroDocumento  = $parametros['nroDocumento'];
         $email = $parametros['email'];
@@ -19,7 +18,6 @@ class CuentaController extends Cuenta implements IApiUsable {
         $usr = new Cuenta();
         $usr->nombre = $nombre;
         $usr->apellido = $apellido;
-        $usr->clave = $clave;
         $usr->tipoDocumento = $tipoDocumento;
         $usr->nroDocumento = $nroDocumento;
         $usr->email = $email;
@@ -33,29 +31,13 @@ class CuentaController extends Cuenta implements IApiUsable {
         return $response
             ->withHeader('Content-Type', 'application/json');
     }
-    public function logIn($request, $response, $args){
-        $parametros = $request->getParsedBody(); 
-        $nombre = $parametros['nombre'];
-        $contrasenia = $parametros['clave'];
-        $cuenta = Cuenta::acceso($nombre, $contrasenia);
-        if($cuenta){
-            $token = AutentificadorJWT::CrearToken($cuenta->nombre, $cuenta->nroDocumento, $cuenta->rol);
-            $payload = json_encode(array('mensaje' => 'se ingresó con exito',
-                                         'jwt' => $token));
-        }else{
-            $payload = json_encode(array('error' => 'Usuario o contraseña incorrectos'));
-        }
-        $response->getBody()->write($payload);
-        return $response
-            ->withHeader('Content-Type', 'application/json');
-    }
     public function TraerUno($request, $response, $args) {
         $nroCuenta = $args['nroCuenta'];
         $tipoCuenta = $args['tipoCuenta'];
         $cuenta = Cuenta::obtenerCuenta($nroCuenta, $tipoCuenta);
         $payload = json_encode($cuenta);
-
         $response->getBody()->write($payload);
+
         return $response
             ->withHeader('Content-Type', 'application/json');
     }
@@ -64,7 +46,8 @@ class CuentaController extends Cuenta implements IApiUsable {
         $datos = Cuenta::obtenerCuentaDatos($parametros['nroCuenta'], $parametros['tipoCuenta']);
         $payload = json_encode($datos);
         $body = explode(",", $payload);
-        $response->getBody()->write($body[7] . " " . $body[8]);
+        $response->getBody()->write($body[6] . " " . $body[7]);
+
         return $response
             ->withHeader('Content-Type', 'application/json');
     }
@@ -93,18 +76,18 @@ class CuentaController extends Cuenta implements IApiUsable {
         
             $nombre = (isset($parametros['nombre']))?$parametros['nombre']:$cuenta->nombre;
             $apellido = (isset($parametros['apellido']))?$parametros['apellido']:$cuenta->apellido;
-            $clave = (isset($parametros['clave']))?$parametros['clave']:$cuenta->clave;
             $tipoDocumento = (isset($parametros['tipoDocumento']))?$parametros['tipoDocumento']:$cuenta->tipoDocumento;
             $nroDocumento = (isset($parametros['nroDocumento']))?$parametros['nroDocumento']:$cuenta->nroDocumento;
             $email = (isset($parametros['email']))?$parametros['email']:$cuenta->email;
             $tipoCuenta = (isset($parametros['tipoCuenta']))?$parametros['tipoCuenta']:$cuenta->tipoCuenta;
             
-            Cuenta::modificarCuenta($cuenta->nroCuenta, $nombre, $apellido, $clave, $tipoDocumento, $nroDocumento, $email, $tipoCuenta);
+            Cuenta::modificarCuenta($cuenta->nroCuenta, $nombre, $apellido, $tipoDocumento, $nroDocumento, $email, $tipoCuenta);
     
             $payload = json_encode(array("mensaje" => "Cuenta modificado con exito"));
         }
 
         $response->getBody()->write($payload);
+
         return $response
             ->withHeader('Content-Type', 'application/json');
     }
@@ -131,6 +114,7 @@ class CuentaController extends Cuenta implements IApiUsable {
         }
 
         $response->getBody()->write($payload);
+
         return $response
             ->withHeader('Content-Type', 'application/json');
     }

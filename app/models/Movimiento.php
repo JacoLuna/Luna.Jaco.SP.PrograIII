@@ -24,7 +24,6 @@ class Movimiento {
 
         return $objAccesoDatos->obtenerUltimoId();
     }
-
     protected static function guardarFoto($datos) {
         $movimiento = Movimiento::obtenerUltimoId();
         if (!$_FILES["imagen"]["error"]) {
@@ -48,21 +47,18 @@ class Movimiento {
             }
         }
     }
-
     public static function obtenerUltimoId() {
         $objAccesoDatos = AccesoDatos::obtenerInstancia();
-        $consulta = $objAccesoDatos->prepararConsulta("SELECT MAX(idMovimiento) as ultimoId FROM movimiento");
+        $consulta = $objAccesoDatos->prepararConsulta("SELECT MAX(idAjuste) as ultimoId FROM ajuste");
         $consulta->execute();
-        return $consulta->fetchObject('Movimiento');
+        return $consulta->fetchObject('Ajuste');
     }
-
     public static function obtenerTodos() {
         $objAccesoDatos = AccesoDatos::obtenerInstancia();
         $consulta = $objAccesoDatos->prepararConsulta("SELECT * FROM movimiento");
         $consulta->execute();
         return $consulta->fetchAll(PDO::FETCH_CLASS, 'Movimiento');
     }
-
     public static function obtenerTodosDeUnaCuenta($nroCuenta, $tipoMovimiento) {
         $objAccesoDatos = AccesoDatos::obtenerInstancia();
         $consulta = $objAccesoDatos->prepararConsulta("SELECT * 
@@ -72,7 +68,6 @@ class Movimiento {
         $consulta->execute();
         return $consulta->fetchAll(PDO::FETCH_CLASS, 'Movimiento');
     }
-    
     public static function obtenerTodosDeUnTipoDeCuenta($tipoCuenta, $tipoMovimiento) {
         $objAccesoDatos = AccesoDatos::obtenerInstancia();
         $consulta = $objAccesoDatos->prepararConsulta("SELECT mov.*, tipoCuenta
@@ -84,7 +79,6 @@ class Movimiento {
         $consulta->execute();
         return $consulta->fetchAll(PDO::FETCH_CLASS, 'Movimiento');
     }
-    
     public static function obtenerTodosMovsDeUnaCuenta($nroCuenta) {
         $objAccesoDatos = AccesoDatos::obtenerInstancia();
         $consulta = $objAccesoDatos->prepararConsulta("SELECT mov.*
@@ -95,7 +89,6 @@ class Movimiento {
         $consulta->execute();
         return $consulta->fetchAll(PDO::FETCH_CLASS, 'Movimiento');
     }
-
     public static function obtenerMovimiento($idMovimiento) {
         $objAccesoDatos = AccesoDatos::obtenerInstancia();
         $consulta = $objAccesoDatos->prepararConsulta("SELECT * 
@@ -105,7 +98,6 @@ class Movimiento {
         $consulta->execute();
         return $consulta->fetchObject('Movimiento');
     }
-
     public static function obtenerMovimientoDatos($nroMovimiento, $tipoMovimiento) {
         $objAccesoDatos = AccesoDatos::obtenerInstancia();
         $consulta = $objAccesoDatos->prepararConsulta("SELECT tipoMovimiento, saldo 
@@ -117,7 +109,6 @@ class Movimiento {
         $consulta->execute();
         return $consulta->fetchObject('Movimiento');
     }
-
     public static function modificarMovimiento($idMovimiento, $monto) {
         $objAccesoDato = AccesoDatos::obtenerInstancia();
 
@@ -126,7 +117,6 @@ class Movimiento {
                                                       WHERE idMovimiento = {$idMovimiento}");
         $consulta->execute();
     }
-
     public static function TotalDepositado($tipoCuenta, $tipoMovimiento, $fecha){
         $objAccesoDato = AccesoDatos::obtenerInstancia();
         $consulta = $objAccesoDato->prepararConsulta("SELECT SUM(monto) as suma
@@ -136,7 +126,6 @@ class Movimiento {
         $consulta->execute();
         return $consulta->fetch();
     }
-
     public static function obtenerTodosMovsEntreFechas($tipoMovimiento, $fecha1, $fecha2){
         $objAccesoDato = AccesoDatos::obtenerInstancia();
         $consulta = $objAccesoDato->prepararConsulta("SELECT nombre, mov.*
@@ -152,5 +141,4 @@ class Movimiento {
         $consulta->execute();
         return $consulta->fetchAll(PDO::FETCH_CLASS, 'Movimiento');
     }
-    
 }

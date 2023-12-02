@@ -45,30 +45,24 @@ class AjusteController extends Ajuste implements IApiUsable {
                     Cuenta::registrarMovimiento($nroCuenta, $tipoCuenta, $cuenta->saldo);
                     Movimiento::modificarMovimiento($usr->idMovimientoAjustado, $montoAjustado);
                     $usr->guardarFoto($usr);
+                    $idAjuste = Ajuste::obtenerUltimoId();
+                    $response = $response->withHeader('idOperacion', $idAjuste->ultimoId);
                 }
             }else{
                 $payload = json_encode(array("ERROR" => "No existe ese movimiento"));
             }
         }
         $response->getBody()->write($payload);
+
+
         return $response
             ->withHeader('Content-Type', 'application/json');
     }
     
     public function TraerUno($request, $response, $args) {
-        // $usr = $args['nroAjuste'];
-        // $ajuste = Ajuste::obtenerAjuste($usr);
-        // $payload = json_encode($ajuste);
-
-        // $response->getBody()->write($payload);
-        // return $response
-        //     ->withHeader('Content-Type', 'application/json');
     }
     
     private function TraerUnAjuste($args) {
-        // $usr = $args['nroAjuste'];
-        // $ajuste = Ajuste::obtenerAjuste($usr);
-        // return $ajuste;
     }
 
     public function TraerTodos($request, $response, $args) {
@@ -77,29 +71,12 @@ class AjusteController extends Ajuste implements IApiUsable {
 
         $response->getBody()->write($payload);
 
+
         return $response
             ->withHeader('Content-Type', 'application/json');
     }
 
     public function ModificarUno($request, $response, $args) {
-        // $ajuste = $this->TraerUnAjuste($args);
-        // $parametros = $request->getParsedBody();
-        
-        // $nombre = (isset($parametros['nombre']))?$parametros['nombre']:$ajuste->nombre;
-        // $apellido = (isset($parametros['apellido']))?$parametros['apellido']:$ajuste->apellido;
-        // $clave = (isset($parametros['clave']))?$parametros['clave']:$ajuste->clave;
-        // $tipoDocumento = (isset($parametros['tipoDocumento']))?$parametros['tipoDocumento']:$ajuste->tipoDocumento;
-        // $nroDocumento = (isset($parametros['nroDocumento']))?$parametros['nroDocumento']:$ajuste->nroDocumento;
-        // $email = (isset($parametros['email']))?$parametros['email']:$ajuste->email;
-        // $tipoAjuste = (isset($parametros['tipoAjuste']))?$parametros['tipoAjuste']:$ajuste->tipoAjuste;
-        
-        // Ajuste::modificarAjuste($ajuste->nroAjuste, $nombre, $apellido, $clave, $tipoDocumento, $nroDocumento, $email, $tipoAjuste);
-
-        // $payload = json_encode(array("mensaje" => "Ajuste modificado con exito"));
-
-        // $response->getBody()->write($payload);
-        // return $response
-        //     ->withHeader('Content-Type', 'application/json');
     }
 
     public function BorrarUno($request, $response, $args) {
