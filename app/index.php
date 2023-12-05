@@ -14,6 +14,7 @@ require_once './controllers/CuentaController.php';
 require_once './controllers/UsuarioController.php';
 require_once './controllers/MovimientoController.php';
 require_once './controllers/AjusteController.php';
+require_once './controllers/LogTransaccionesController.php';
 require_once './utilities/AutentificadorJWT.php';
 require_once './utilities/Utilities.php';
 require_once './models/Log.php';
@@ -86,5 +87,13 @@ $app->group('/Consultas', function (RouteCollectorProxy $group) {
   ->add(\logMiddleware::class . ':registrarAccion');
 })->add(new operadorMiddleware)
 ->add(new AuthMiddleware);
+
+$app->group('/Logs', function (RouteCollectorProxy $group) {
+
+  $group->get('/archivo/Csv', \LogTransaccionesController::class . ':descargarArchivoCsv');
+
+})->add(new AuthMiddleware);
+
+
 
 $app->run();

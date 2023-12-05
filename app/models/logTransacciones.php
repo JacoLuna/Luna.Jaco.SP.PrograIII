@@ -20,6 +20,10 @@ class LogTransacciones {
 
 
     public static function obtenerTodos() {
+        $objAccesoDatos = AccesoDatos::obtenerInstancia();
+        $consulta = $objAccesoDatos->prepararConsulta("SELECT * FROM logtransacciones");
+        $consulta->execute();
+        return $consulta->fetchAll(PDO::FETCH_CLASS, 'LogTransacciones');
     }
 
     public static function obtenerLogTransacciones($idLogTransacciones, $tipoLogTransacciones) {
@@ -35,5 +39,9 @@ class LogTransacciones {
     }
 
     public static function borrarLogTransacciones($idLogTransacciones, $tipoLogTransacciones) {
+    }
+
+    public function toStringCSV(){
+        return $this->idLogTransaccion . ","  . $this->fecha . "," . $this->idOperacion . "," . $this->idUsuario . "\n";
     }
 }
